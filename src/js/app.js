@@ -30,7 +30,7 @@ class App {
 
   getNewMesseges() {
     ajax
-      .getJSON(`http://localhost:7070/new_messages/unread`)
+      .getJSON(`https://rxjs-dz.herokuapp.com/new_messages/unread`)
       .pipe(
         filter((userResponse) => userResponse.status === 200),
         map((userResponse) => this.arrToElement(userResponse)),
