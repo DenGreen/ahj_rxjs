@@ -17,7 +17,7 @@ class App {
 
   getMesseges() {
     ajax
-      .getJSON(`http://localhost:7070/messages/unread`)
+      .getJSON(`https://rxjs-dz.herokuapp.com/`)
       .pipe(
         map((userResponse) => this.arrToElement(userResponse)),
         catchError((error) => {
