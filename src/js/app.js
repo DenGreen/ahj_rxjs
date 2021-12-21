@@ -1,45 +1,39 @@
 import { ajax } from "rxjs/ajax";
-import { map, catchError, filter } from "rxjs/operators";
-import { of } from "rxjs";
+import { map, catchError, filter, switchMap } from "rxjs/operators";
+import { of, interval } from "rxjs";
 import jsonTest from "../test.json";
-
 
 class App {
   constructor() {
     this.messages = document.querySelector(".messages");
-    this.init();
-  }
-
-  init() {
     this.getMesseges();
-    setInterval(() => this.getNewMesseges(), 3000);
+    this.getNewMesseges().subscribe((userResponse) => this.arrToElement(userResponse));
   }
 
   getMesseges() {
     ajax
-      .getJSON(`https://rxjs-dz.herokuapp.com/new_messages/unread`)
+      .getJSON(`https://rxjs-dz.herokuapp.com/messages/unread`)
       .pipe(
-        map((userResponse) => this.arrToElement(userResponse)),
         catchError((error) => {
           console.log("error: ", error);
           return of(error);
         })
       )
-      .subscribe();
+      .subscribe((userResponse) => this.arrToElement(userResponse));
   }
 
   getNewMesseges() {
-    ajax
-      .getJSON(`https://rxjs-dz.herokuapp.com/new_messages/unread`)
-      .pipe(
-        filter((userResponse) => userResponse.status === 200),
-        map((userResponse) => this.arrToElement(userResponse)),
-        catchError((error) => {
-          console.log("error: ", error);
-          return of(error);
-        })
-      )
-      .subscribe();
+    return interval(3000).pipe(
+      switchMap(() => {
+        return ajax.getJSON(`https://rxjs-dz.herokuapp.com/new_messages/unread`).pipe(
+          filter((userResponse) => userResponse.status === 200),
+          catchError((error) => {
+            console.log("error: ", error);
+            return of(error);
+          })
+        );
+      })
+    );
   }
 
   test() {
@@ -56,7 +50,9 @@ class App {
       "afterbegin",
       `<div class="messages__massage">
         <div class="massage__mail">${elem.from}</div>
-        <div class="massage__text">${this.checkingMessageLength(elem.subject)}</div>
+        <div class="massage__text">${this.checkingMessageLength(
+          elem.subject
+        )}</div>
         <div class="massage__date">${this.addDate()}</div>
       </div>
       `
@@ -65,19 +61,22 @@ class App {
 
   addDate() {
     const date = new Date().toLocaleString(undefined, {
-      hour: 'numeric', minute: 'numeric'
+      hour: "numeric",
+      minute: "numeric",
     });
 
     const dateYare = new Date().toLocaleString(undefined, {
-      year: 'numeric', month: 'numeric', day: 'numeric',
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
     });
-    return (date + ' ' + dateYare);
+    return date + " " + dateYare;
   }
 
   checkingMessageLength(massageText) {
     if (massageText.length >= 15) {
       const strModif = massageText.slice(0, 14);
-      return (strModif + "...");
+      return strModif + "...";
     }
     return massageText;
   }
