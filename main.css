@@ -1,0 +1,49 @@
+*{
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: Sans-Regular;  /**Arial Narrow, sans-serif**/
+  src: url("https://netology-code.github.io/html-2-diploma/sources/fonts/OpenSans-Regular.woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.messages {
+  overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 800px;
+  height: 500px;
+  border-radius: 20px;
+  background: rgb(63,94,251);
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
+
+.messages__massage {
+  font-family: Sans-Regular, "Arial Narrow", sans-serif;
+  line-height: 36px;
+  font-size: 14px;
+  text-decoration: none;
+  color: black;
+
+  display: flex;
+  padding-top: 14px;
+  justify-content: space-between;
+  margin-top: 15px;
+  min-height: 60px;
+  width: 600px;
+  background-color: aliceblue;
+  border-radius: 5px;
+}
+
+.massage__mail {
+  padding-left: 20px;
+}
+.massage__text {
+  width: 150px;
+}
+.massage__date {
+  padding-right: 20px;
+}
